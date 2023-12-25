@@ -11,7 +11,6 @@ const SteamForm = () => {
   const buttonHandler = () => {
     const newSteamId = steamIdInputRef.current?.value || "";
     setSteamId(newSteamId);
-    steamIdInputRef.current!.value = "";
   };
   return (
     <>
