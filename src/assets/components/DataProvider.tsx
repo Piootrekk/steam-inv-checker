@@ -2,9 +2,12 @@
 import React from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
+import FinalAssets from "./interfaces/FinalAssets";
+import DataDisplay from "./DataDisplay";
 
 interface DataProviderProps {
   inputValue: string;
+  autoComValue: string;
 }
 
 interface Item {
@@ -12,13 +15,6 @@ interface Item {
   icon_url: string;
   classid: string;
 }
-
-// interface Dictionary {
-//   key: number;
-//   market_hash_name: string;
-//   amount: number;
-//   icon_url: string;
-// }
 
 interface Assets {
   classid: string;
@@ -31,19 +27,23 @@ interface Assets {
 // https://community.cloudflare.steamstatic.com/economy/image/6TMcQ7eX6E0EZl2byXi7vaVKyDk_zQLX05x6eLCFM9neAckxGDf7qU2e2gu64OnAeQ7835Za7WLEfCk4nReh8DEiv5dbMag6r7MzSPm-PITFYik
 // backup url: `https://cors-anywhere.herokuapp.com/https://steamcommunity.com/inventory/${inputValue}/252490/2?l=english&count=5000`,
 
-const fetchData = async (inputValue: string) => {
+const fetchData = async (inputValue: string, autoComValue: string) => {
+  const version = autoComValue === "322330" ? "1" : "2";
   const response = await axios({
     method: "GET",
 
-    url: `https://thingproxy.freeboard.io/fetch/https://steamcommunity.com/inventory/${inputValue}/252490/2?l=english&count=5000`,
+    url: `https://thingproxy.freeboard.io/fetch/https://steamcommunity.com/inventory/${inputValue}/${autoComValue}/${version}?l=english&count=5000`,
   });
   return response.data;
 };
 
-const DataProvider: React.FC<DataProviderProps> = ({ inputValue }) => {
+const DataProvider: React.FC<DataProviderProps> = ({
+  inputValue,
+  autoComValue,
+}) => {
   const { data, isLoading, isError } = useQuery(
     ["steamInventory", inputValue],
-    () => fetchData(inputValue),
+    () => fetchData(inputValue, autoComValue),
     {
       retry: false,
     }
@@ -68,7 +68,7 @@ const DataProvider: React.FC<DataProviderProps> = ({ inputValue }) => {
     }
   });
 
-  const assets = Array.from(uniqueclassidMap).map(
+  const assets: FinalAssets[] = Array.from(uniqueclassidMap).map(
     ([classid, amount], index) => {
       const correspondingItem = itemsDescriptions.find(
         (item: Item) => item.classid === classid
@@ -86,11 +86,15 @@ const DataProvider: React.FC<DataProviderProps> = ({ inputValue }) => {
   );
 
   return (
-    <div>
+    <div
+      style={{
+        textAlign: "center",
+      }}
+    >
       <h1>Data from Steam API</h1>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Error fetching data </div>}
-      {data && <pre>{JSON.stringify(assets, null, 2)}</pre>}
+      {data && <DataDisplay assets={assets} />}
     </div>
   );
 };
