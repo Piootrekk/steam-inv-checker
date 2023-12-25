@@ -48,8 +48,8 @@ const SteamForm = () => {
         <Button variant="contained" onClick={buttonHandler}>
           Find inventory
         </Button>
-        {steamId !== "" && <DataProvider inputValue={steamId} />}
       </Box>
+      {steamId !== "" && <DataProvider inputValue={steamId} />}
     </>
   );
 };
