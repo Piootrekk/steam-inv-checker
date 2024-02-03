@@ -6,6 +6,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import { useState, useRef } from "react";
 
+import { BoxStyles } from "./SteamFormStyles";
+
 const SteamForm = () => {
   const [steamId, setSteamId] = useState<string>("");
   const steamIdInputRef = useRef<HTMLInputElement>(null);
@@ -47,38 +49,7 @@ const SteamForm = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          border: 1,
-          margin: "1rem",
-          padding: "1rem",
-          textAlign: "center",
-          boxShadow: "0 0 10px rgba(0,0,0,0.5)",
-          borderRadius: "10px",
-          "& .MuiGrid-container": {
-            textAlign: "center",
-            justifyContent: "center",
-          },
-
-          "& .MuiTextField-root": {
-            margin: "0.5rem",
-
-            "& input": {
-              height: "1rem",
-              width: "30rem",
-            },
-          },
-          "& .MuiButton-root": {
-            margin: "0.5rem",
-            width: "10rem",
-            height: "3rem",
-          },
-          "& .MuiAutocomplete-root": {
-            margin: "0.5rem",
-            width: "17rem",
-          },
-        }}
-      >
+      <Box sx={BoxStyles}>
         <h1>Provide STEAM ID</h1>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
