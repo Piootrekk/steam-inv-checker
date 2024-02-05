@@ -13,6 +13,7 @@ const SteamForm = () => {
   const steamIdInputRef = useRef<HTMLInputElement>(null);
   const [gameId, setGameId] = useState<string>("");
   const gameIdInputRef = useRef<HTMLInputElement>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const GamesID = [
     {
@@ -45,6 +46,7 @@ const SteamForm = () => {
     );
     const newGameId = selectedGame ? selectedGame.value : "";
     setGameId(newGameId);
+    setReloadKey(reloadKey + 1);
   };
 
   return (
@@ -80,7 +82,11 @@ const SteamForm = () => {
         </Button>
       </Box>
       {steamId !== "" && gameId !== "" && (
-        <DataProvider inputValue={steamId} autoComValue={gameId} />
+        <DataProvider
+          key={reloadKey}
+          inputValue={steamId}
+          autoComValue={gameId}
+        />
       )}
     </>
   );
