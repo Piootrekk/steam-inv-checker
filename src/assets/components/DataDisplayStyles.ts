@@ -1,11 +1,12 @@
 // DataDisplayStyles.ts
 
 export const Styles = {
-  margin: "3rem",
+  margin: "1rem",
   padding: "0.5rem",
   boxShadow: "0 2px 5px rgba(0,0,0,0.5)",
   borderRadius: "10px",
   textAlign: "center",
+  position: "relative",
 
   "& .MuiGrid-container": {
     justifyContent: "center",
@@ -14,16 +15,33 @@ export const Styles = {
 
   "& .MuiGrid-item": {},
   "& .MuiCard-root": {
+    transform: "scale(1) rotate(0)",
+    boxShadow: "0 0 0 rgba(0,2,3,0)",
+    transition: "transform 0.3s",
+    position: "relative",
     padding: "0.5rem",
-    transition: "transform 0.3s, rotate 0.3s 0.5s, box-shadow 0.3s",
+
+    "&::before": {
+      content: "''",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    },
+
     "&:hover": {
       transform: "scale(1.15) rotate(2deg)",
-      boxShadow: "0 5px 15px rgba(0,0,0,0.5)",
+      boxShadow: "0 5px 5px rgba(0,2,3,1)",
     },
   },
   "& img": {
     width: "6rem",
     height: "6rem",
     margin: "auto",
+  },
+  "& .MuiButtonBase-root": {
+    padding: "0.75rem",
+    marginBottom: "2rem",
   },
 };
