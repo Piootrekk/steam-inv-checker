@@ -95,24 +95,6 @@ const DataProvider: React.FC<DataProviderProps> = ({
     }
   );
 
-  useEffect(() => {
-    if (data) {
-      const currentDate = new Date();
-      const dateString = `${currentDate.getFullYear()}-${
-        currentDate.getMonth() + 1
-      }-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
-
-      const dataToSave = {
-        steamid: inputValue,
-        appid: autoComValue,
-        timeAdded: new Date(),
-        data: data,
-      };
-      setDataToLocalStorage(`Items:${dateString}`, JSON.stringify(dataToSave));
-      clearOldestDataFromLocalStorage("Items:", 3);
-    }
-  }, [data]);
-
   const itemsDescriptions = data?.descriptions.map((item: Item) => ({
     classid: item.classid,
     market_hash_name: item.market_hash_name,
@@ -127,6 +109,27 @@ const DataProvider: React.FC<DataProviderProps> = ({
     uniqueClassidMap,
     itemsDescriptions
   );
+
+  useEffect(() => {
+    if (assets.length > 0) {
+      const currentDate = new Date();
+      const dateString = `${currentDate.getFullYear()}-${
+        currentDate.getMonth() + 1
+      }-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
+
+      const dataToSave = {
+        steamid: inputValue,
+        appid: autoComValue,
+        timeAdded: new Date(),
+        data: assets,
+      };
+      setDataToLocalStorage(
+        `Items:${autoComValue}:${dateString}`,
+        JSON.stringify(dataToSave)
+      );
+      clearOldestDataFromLocalStorage("Items:", 3);
+    }
+  }, [assets]);
 
   return (
     <div
@@ -143,6 +146,7 @@ const DataProvider: React.FC<DataProviderProps> = ({
         <div>
           <ErrorOutlineIcon style={{ color: "red", marginRight: "10px" }} />
           Error fetching data from Steam API
+          <ErrorOutlineIcon style={{ color: "red", marginLeft: "10px" }} />
         </div>
       )}
       {data && <DataDisplay assets={assets} />}

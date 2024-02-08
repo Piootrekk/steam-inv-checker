@@ -5,6 +5,8 @@ import DataProvider from "./DataProvider";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import { useState, useRef } from "react";
+import CachedData from "./CachedData";
+import { getKeysWithPrefix } from "./localStorage";
 
 import { BoxStyles } from "./SteamFormStyles";
 
@@ -80,6 +82,9 @@ const SteamForm = () => {
         <Button variant="contained" onClick={buttonHandler}>
           Find inventory
         </Button>
+        {steamId === "" &&
+          gameId === "" &&
+          getKeysWithPrefix("Items:").length && <CachedData />}
       </Box>
       {steamId !== "" && gameId !== "" && (
         <DataProvider

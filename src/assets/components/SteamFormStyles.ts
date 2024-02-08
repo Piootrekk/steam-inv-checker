@@ -3,6 +3,7 @@ export const BoxStyles = {
   margin: "1rem",
   padding: "1rem",
   textAlign: "center",
+  justifyContent: "center",
   boxShadow: "0 0 10px rgba(0,0,0,0.5)",
   borderRadius: "10px",
   "& .MuiGrid-container": {
