@@ -4,9 +4,11 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Styles } from "./DataDisplayStyles";
+import { Styles, BoxStyles, ButtonStyles } from "./DataDisplayStyles";
 import { useState } from "react";
 import { Button } from "@mui/material";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 interface DataDisplayProps {
   assets: FinalAssets[];
@@ -38,9 +40,7 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
     <Box sx={Styles}>
       <Button
         variant="contained"
-        sx={{
-          visibility: selectedToCheckPrice.length > 0 ? "visible" : "hidden",
-        }}
+        sx={ButtonStyles(selectedToCheckPrice.length)}
       >
         Load Price Selected Items: {selectedToCheckPrice.length}
       </Button>
@@ -49,26 +49,25 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
         {assets.map((asset: FinalAssets) => (
           <Grid item key={asset.key}>
             <Card
-              sx={{
-                backgroundColor: `#${asset.name_color}`,
-                "&:hover": {
-                  cursor: asset.marketable === 1 ? "pointer" : "not-allowed",
-                },
-
-                "&::before": {
-                  border: selectedToCheckPrice.some(
-                    (selectedAsset) => selectedAsset.key === asset.key
-                  )
-                    ? "3px solid blue"
-                    : "none",
-                },
-              }}
+              sx={BoxStyles(
+                asset.name_color,
+                asset.marketable,
+                selectedToCheckPrice.some(
+                  (selectedAsset) => selectedAsset.key === asset.key
+                )
+              )}
               onClick={() => handleCardClick(asset)}
             >
-              <img
-                src={`https://community.cloudflare.steamstatic.com/economy/image/${asset.icon_url}`}
-                alt="item"
-              />
+              <div className="imgDiv">
+                <LazyLoadImage
+                  effect="blur"
+                  src={`https://community.cloudflare.steamstatic.com/economy/image/${asset.icon_url}`}
+                  alt="item"
+                  width="100%"
+                  height="100%"
+                  placeholder={<div>loading...</div>}
+                />
+              </div>
               <Typography>{asset.amount}</Typography>
             </Card>
           </Grid>

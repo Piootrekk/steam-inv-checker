@@ -35,7 +35,7 @@ export const Styles = {
       boxShadow: "0 5px 5px rgba(0,2,3,1)",
     },
   },
-  "& img": {
+  "& .imgDiv": {
     width: "6rem",
     height: "6rem",
     margin: "auto",
@@ -45,3 +45,21 @@ export const Styles = {
     marginBottom: "2rem",
   },
 };
+
+export const BoxStyles = (
+  backgroundColor: string,
+  marketable: number | boolean,
+  selected: boolean
+) => ({
+  backgroundColor: `#${backgroundColor}`,
+  "&:hover": {
+    cursor: marketable === 1 ? "pointer" : "not-allowed",
+  },
+  "&::before": {
+    border: selected ? "3px solid blue" : "none",
+  },
+});
+
+export const ButtonStyles = (arrSize: number) => ({
+  visibility: arrSize > 0 ? "visible" : "hidden",
+});
