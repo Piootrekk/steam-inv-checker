@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import FinalAssets from "./interfaces/FinalAssets";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Styles, BoxStyles, ButtonStyles } from "./DataDisplayStyles";
-import { useState } from "react";
+import { Styles, BoxStyles, ButtonStyles } from "./styles/DataDisplayStyles";
 import { Button } from "@mui/material";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
+import LazyImage from "./LazyImage";
 
 interface DataDisplayProps {
   assets: FinalAssets[];
@@ -19,22 +17,20 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
     FinalAssets[]
   >([]);
 
-  const handleCardClick = (selectedAsset: FinalAssets) => {
-    const isAssetSelected = selectedToCheckPrice.some(
-      (asset: FinalAssets) => asset.key === selectedAsset.key
-    );
-    if (isAssetSelected) {
-      const updatedSelectedAssets = selectedToCheckPrice.filter(
-        (asset: FinalAssets) => asset.key !== selectedAsset.key
+  const handleCardClick = useCallback((selectedAsset: FinalAssets) => {
+    setSelectedToCheckPrice((prevSelectedAssets) => {
+      const isAssetSelected = prevSelectedAssets.some(
+        (asset) => asset.key === selectedAsset.key
       );
-      setSelectedToCheckPrice(updatedSelectedAssets);
-    } else {
-      setSelectedToCheckPrice((prevSelectedAssets: FinalAssets[]) => [
-        ...prevSelectedAssets,
-        selectedAsset,
-      ]);
-    }
-  };
+      if (isAssetSelected) {
+        return prevSelectedAssets.filter(
+          (asset) => asset.key !== selectedAsset.key
+        );
+      } else {
+        return [...prevSelectedAssets, selectedAsset];
+      }
+    });
+  }, []);
 
   return (
     <Box sx={Styles}>
@@ -46,7 +42,7 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
       </Button>
 
       <Grid container spacing={2}>
-        {assets.map((asset: FinalAssets) => (
+        {assets.map((asset) => (
           <Grid item key={asset.key}>
             <Card
               sx={BoxStyles(
@@ -59,13 +55,9 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
               onClick={() => handleCardClick(asset)}
             >
               <div className="imgDiv">
-                <LazyLoadImage
-                  effect="blur"
+                <LazyImage
                   src={`https://community.cloudflare.steamstatic.com/economy/image/${asset.icon_url}`}
                   alt="item"
-                  width="100%"
-                  height="100%"
-                  placeholder={<div>loading...</div>}
                 />
               </div>
               <Typography>{asset.amount}</Typography>
@@ -76,4 +68,5 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
     </Box>
   );
 };
+
 export default DataDisplay;

@@ -4,12 +4,11 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import FinalAssets from "./interfaces/FinalAssets";
 import DataDisplay from "./DataDisplay";
+import DataInforms from "./DataInforms";
 import {
   setDataToLocalStorage,
   clearOldestDataFromLocalStorage,
-} from "./localStorage";
-import CircularProgress from "@mui/material/CircularProgress";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+} from "./utils/localStorage";
 
 interface DataProviderProps {
   inputValue: string;
@@ -110,47 +109,44 @@ const DataProvider: React.FC<DataProviderProps> = ({
     itemsDescriptions
   );
 
-  useEffect(() => {
-    if (assets.length > 0) {
-      const currentDate = new Date();
-      const dateString = `${currentDate.getFullYear()}-${
-        currentDate.getMonth() + 1
-      }-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
+  const autoSaveToLocalStorage = (
+    items: FinalAssets[],
+    steamid: string,
+    appid: string
+  ) => {
+    const currentDate = new Date();
+    const dateString = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}`;
 
-      const dataToSave = {
-        steamid: inputValue,
-        appid: autoComValue,
-        timeAdded: new Date(),
-        data: assets,
-      };
-      setDataToLocalStorage(
-        `Items:${autoComValue}:${dateString}`,
-        JSON.stringify(dataToSave)
-      );
-      clearOldestDataFromLocalStorage("Items:", 3);
-    }
+    const dataToSave = {
+      steamid: steamid,
+      appid: appid,
+      timeAdded: new Date(),
+      data: items,
+    };
+    setDataToLocalStorage(
+      `Items:${autoComValue}:${dateString}`,
+      JSON.stringify(dataToSave)
+    );
+    clearOldestDataFromLocalStorage("Items:", 3);
+  };
+
+  useEffect(() => {
+    if (assets.length > 0)
+      autoSaveToLocalStorage(assets, inputValue, autoComValue);
   }, [assets]);
 
   return (
-    <div
-      style={{
-        textAlign: "center",
-      }}
-    >
-      <h1>Data from Steam API</h1>
-      <p>SteamId: {inputValue}</p>
-      <p>AppId: {autoComValue}</p>
-
-      {isLoading && <CircularProgress />}
-      {isError && (
-        <div>
-          <ErrorOutlineIcon style={{ color: "red", marginRight: "10px" }} />
-          Error fetching data from Steam API
-          <ErrorOutlineIcon style={{ color: "red", marginLeft: "10px" }} />
-        </div>
-      )}
+    <>
+      <DataInforms
+        isLoading={isLoading}
+        isError={isError}
+        inputValue={inputValue}
+        autoComValue={autoComValue}
+      />
       {data && <DataDisplay assets={assets} />}
-    </div>
+    </>
   );
 };
 

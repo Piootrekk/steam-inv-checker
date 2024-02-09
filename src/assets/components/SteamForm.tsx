@@ -6,9 +6,9 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import { useState, useRef } from "react";
 import CachedData from "./CachedData";
-import { getKeysWithPrefix } from "./localStorage";
+import { getKeysWithPrefix } from "./utils/localStorage";
 
-import { BoxStyles } from "./SteamFormStyles";
+import { BoxStyles } from "./styles/SteamFormStyles";
 
 const SteamForm = () => {
   const [steamId, setSteamId] = useState<string>("");

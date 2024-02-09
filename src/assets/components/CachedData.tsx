@@ -4,8 +4,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 
-import { BoxStyles } from "./CachedDataStyles";
-import { getKeysWithPrefix } from "./localStorage";
+import { BoxStyles } from "./styles/CachedDataStyles";
+import { getKeysWithPrefix } from "./utils/localStorage";
 
 const CachedData = () => {
   const cachedData = getKeysWithPrefix("Items:");
