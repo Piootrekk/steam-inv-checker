@@ -57,9 +57,16 @@ export const BoxStyles = (
   },
   "&::before": {
     border: selected ? "3px solid blue" : "none",
+    background: selected ? "rgba(0, 0, 0, 0.25)" : "none",
   },
 });
 
 export const ButtonStyles = (arrSize: number) => ({
   visibility: arrSize > 0 ? "visible" : "hidden",
+  margin: "auto",
+  marginTop: "3rem",
+  padding: "0.75rem",
+  display: "block",
+  width: "30%",
+  height: "auto",
 });

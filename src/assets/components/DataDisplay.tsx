@@ -33,39 +33,40 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
   }, []);
 
   return (
-    <Box sx={Styles}>
+    <>
       <Button
         variant="contained"
         sx={ButtonStyles(selectedToCheckPrice.length)}
       >
         Load Price Selected Items: {selectedToCheckPrice.length}
       </Button>
-
-      <Grid container spacing={2}>
-        {assets.map((asset) => (
-          <Grid item key={asset.key}>
-            <Card
-              sx={BoxStyles(
-                asset.name_color,
-                asset.marketable,
-                selectedToCheckPrice.some(
-                  (selectedAsset) => selectedAsset.key === asset.key
-                )
-              )}
-              onClick={() => handleCardClick(asset)}
-            >
-              <div className="imgDiv">
-                <LazyImage
-                  src={`https://community.cloudflare.steamstatic.com/economy/image/${asset.icon_url}`}
-                  alt="item"
-                />
-              </div>
-              <Typography>{asset.amount}</Typography>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+      <Box sx={Styles}>
+        <Grid container spacing={2}>
+          {assets.map((asset) => (
+            <Grid item key={asset.key}>
+              <Card
+                sx={BoxStyles(
+                  asset.name_color,
+                  asset.marketable,
+                  selectedToCheckPrice.some(
+                    (selectedAsset) => selectedAsset.key === asset.key
+                  )
+                )}
+                onClick={() => handleCardClick(asset)}
+              >
+                <div className="imgDiv">
+                  <LazyImage
+                    src={`https://community.cloudflare.steamstatic.com/economy/image/${asset.icon_url}`}
+                    alt="item"
+                  />
+                </div>
+                <Typography>{asset.amount}</Typography>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </>
   );
 };
 

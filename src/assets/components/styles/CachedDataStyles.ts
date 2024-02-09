@@ -2,5 +2,8 @@ export const BoxStyles = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginTop: "2rem",
+  marginTop: "1rem",
+  "& .MuiAutocomplete-root": {
+    width: "28%",
+  },
 };

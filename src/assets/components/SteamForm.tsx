@@ -79,13 +79,18 @@ const SteamForm = () => {
             />
           </Grid>
         </Grid>
-        <Button variant="contained" onClick={buttonHandler}>
+        <Button
+          className="buttonForms"
+          variant="contained"
+          onClick={buttonHandler}
+        >
           Find inventory
         </Button>
         {steamId === "" &&
           gameId === "" &&
           getKeysWithPrefix("Items:").length && <CachedData />}
       </Box>
+
       {steamId !== "" && gameId !== "" && (
         <DataProvider
           key={reloadKey}

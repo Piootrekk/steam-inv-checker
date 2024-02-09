@@ -19,13 +19,13 @@ export const BoxStyles = {
       width: "30rem",
     },
   },
-  "& .MuiButton-root": {
+  "& .buttonForms": {
     margin: "0.5rem",
     width: "10rem",
     height: "3rem",
   },
   "& .MuiAutocomplete-root": {
     margin: "0.5rem",
-    width: "17rem",
+    width: "10rem",
   },
 };
