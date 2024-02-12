@@ -7,4 +7,5 @@ export default interface FinalAssets {
   marketable: boolean | number;
   price: string | number;
   volume: string | number;
+  median_price: string | number;
 }

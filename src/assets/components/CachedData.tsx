@@ -47,7 +47,12 @@ const CachedData = () => {
           autoComValue={localStorageData.appid}
         />
       )}
-      {localStorageData && <DataDisplay assets={localStorageData.data} />}
+      {localStorageData && (
+        <DataDisplay
+          assets={localStorageData.data}
+          autoComValue={localStorageData.appid}
+        />
+      )}
     </>
   );
 };

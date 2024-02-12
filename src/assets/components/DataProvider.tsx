@@ -1,7 +1,7 @@
 // DataProvider.tsx
 import React, { useEffect } from "react";
 import { useQuery } from "react-query";
-import axios from "axios";
+
 import FinalAssets from "./interfaces/FinalAssets";
 import DataDisplay from "./DataDisplay";
 import DataInforms from "./DataInforms";
@@ -9,7 +9,7 @@ import {
   setDataToLocalStorage,
   clearOldestDataFromLocalStorage,
 } from "./utils/localStorage";
-
+import { fetchInventory } from "./utils/fetchData";
 interface DataProviderProps {
   inputValue: string;
   autoComValue: string;
@@ -27,16 +27,6 @@ interface Assets {
   classid: string;
   amount: string;
 }
-
-const fetchData = async (inputValue: string, autoComValue: string) => {
-  const version = autoComValue === "322330" ? "1" : "2";
-  const response = await axios({
-    method: "GET",
-    url: `https://thingproxy.freeboard.io/fetch/https://steamcommunity.com/inventory/${inputValue}/${autoComValue}/${version}?l=english&count=5000`,
-  });
-  console.log("data fetched!");
-  return response.data;
-};
 
 const combineAssets = (data: { assets?: Assets[] }): Map<string, number> => {
   const uniqueclassidMap = new Map<string, number>();
@@ -77,6 +67,7 @@ const processFinalAssets = (
       marketable: marketable,
       volume: "",
       price: "",
+      median_price: "",
     };
   });
 };
@@ -87,7 +78,7 @@ const DataProvider: React.FC<DataProviderProps> = ({
 }) => {
   const { data, isLoading, isError } = useQuery(
     ["steamInventory", inputValue],
-    () => fetchData(inputValue, autoComValue),
+    () => fetchInventory(inputValue, autoComValue),
     {
       retry: false,
       cacheTime: 0,
