@@ -43,8 +43,6 @@ const CachedData = () => {
       </Box>
       {localStorageData && (
         <DataInforms
-          isLoading={false}
-          isError={false}
           inputValue={localStorageData.steamid}
           autoComValue={localStorageData.appid}
         />

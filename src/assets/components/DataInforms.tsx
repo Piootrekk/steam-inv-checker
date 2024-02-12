@@ -4,15 +4,15 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Styles } from "./styles/DataInformsStyles";
 
 interface DataInformsProps {
-  isLoading: boolean;
-  isError: boolean;
+  isLoading?: boolean;
+  isError?: boolean;
   inputValue: string;
   autoComValue: string;
 }
 
 const DataInforms: React.FC<DataInformsProps> = ({
-  isLoading,
-  isError,
+  isLoading = false,
+  isError = false,
   inputValue,
   autoComValue,
 }) => {

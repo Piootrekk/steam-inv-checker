@@ -7,18 +7,19 @@ import Typography from "@mui/material/Typography";
 import { Styles, BoxStyles, ButtonStyles } from "./styles/DataDisplayStyles";
 import { Button } from "@mui/material";
 import LazyImage from "./LazyImage";
+import PriceProvider from "./PriceProvider";
 
 interface DataDisplayProps {
   assets: FinalAssets[];
+  autoComValue: string;
 }
 
-const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
-  const [selectedToCheckPrice, setSelectedToCheckPrice] = useState<
-    FinalAssets[]
-  >([]);
+const DataDisplay: React.FC<DataDisplayProps> = ({ assets, autoComValue }) => {
+  const [selectedItems, setSelectedItems] = useState<FinalAssets[]>([]);
+  const [sendSelected, setSendSelected] = useState<FinalAssets[]>([]);
 
   const handleCardClick = useCallback((selectedAsset: FinalAssets) => {
-    setSelectedToCheckPrice((prevSelectedAssets) => {
+    setSelectedItems((prevSelectedAssets) => {
       const isAssetSelected = prevSelectedAssets.some(
         (asset) => asset.key === selectedAsset.key
       );
@@ -32,13 +33,18 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
     });
   }, []);
 
+  const buttonHandler = () => {
+    setSendSelected([...selectedItems]);
+  };
+
   return (
     <>
       <Button
         variant="contained"
-        sx={ButtonStyles(selectedToCheckPrice.length)}
+        sx={ButtonStyles(selectedItems.length)}
+        onClick={buttonHandler}
       >
-        Load Price Selected Items: {selectedToCheckPrice.length}
+        {`Fetch price ${selectedItems.length} items`}
       </Button>
       <Box sx={Styles}>
         <Grid container spacing={2}>
@@ -48,7 +54,7 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
                 sx={BoxStyles(
                   asset.name_color,
                   asset.marketable,
-                  selectedToCheckPrice.some(
+                  selectedItems.some(
                     (selectedAsset) => selectedAsset.key === asset.key
                   )
                 )}
@@ -66,6 +72,9 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets }) => {
           ))}
         </Grid>
       </Box>
+      {sendSelected.length > 0 && (
+        <PriceProvider assets={sendSelected} autoComValue={autoComValue} />
+      )}
     </>
   );
 };

@@ -32,9 +32,9 @@ const fetchData = async (inputValue: string, autoComValue: string) => {
   const version = autoComValue === "322330" ? "1" : "2";
   const response = await axios({
     method: "GET",
-
     url: `https://thingproxy.freeboard.io/fetch/https://steamcommunity.com/inventory/${inputValue}/${autoComValue}/${version}?l=english&count=5000`,
   });
+  console.log("data fetched!");
   return response.data;
 };
 
@@ -145,7 +145,7 @@ const DataProvider: React.FC<DataProviderProps> = ({
         inputValue={inputValue}
         autoComValue={autoComValue}
       />
-      {data && <DataDisplay assets={assets} />}
+      {data && <DataDisplay assets={assets} autoComValue={autoComValue} />}
     </>
   );
 };

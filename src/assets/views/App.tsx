@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const App = () => {
+  console.log("76561198090272581");
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
