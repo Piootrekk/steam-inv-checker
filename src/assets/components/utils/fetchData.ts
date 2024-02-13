@@ -1,6 +1,4 @@
 import axios from "axios";
-import FinalAssets from "../interfaces/FinalAssets";
-import React, { Dispatch } from "react";
 
 // https://steamcommunity.com/inventory/${steamId}/252490/2?l=english&count=5000
 // http://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=HASHNAME
@@ -36,40 +34,4 @@ export const fetchPrice = async (
 ) => {
   const url = `https://express-proxy-jnve.onrender.com/get/https://steamcommunity.com/market/priceoverview/?appid=${autoComValue}&currency=6&market_hash_name=${market_hash_name}`;
   return await fetchData(url);
-};
-
-export const fetchBulkPrice = async (
-  assets: FinalAssets[],
-  autoComValue: string,
-  setUpdatedAssets: Dispatch<React.SetStateAction<any>>,
-  method: any,
-  delay: number
-) => {
-  setUpdatedAssets([]);
-  let volume: string = "";
-  let price: string = "";
-  let median_price: string = "";
-  for (const asset of assets) {
-    try {
-      const response = await method(asset.market_hash_name, autoComValue);
-      volume = response.volume;
-      price = response.lowest_price;
-      median_price = response.median_price;
-    } catch (error) {
-      volume = "ERROR";
-      price = "ERROR";
-      median_price = "ERROR";
-    }
-    const updatedAssetsData = {
-      ...asset,
-      volume,
-      price,
-      median_price,
-    };
-    setUpdatedAssets((prev: FinalAssets[]) => [
-      ...prev.filter((prevAsset) => prevAsset.key !== asset.key),
-      updatedAssetsData,
-    ]);
-    await new Promise((resolve) => setTimeout(resolve, delay));
-  }
 };
