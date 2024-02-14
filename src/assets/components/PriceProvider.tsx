@@ -1,22 +1,15 @@
 import React, { Dispatch } from "react";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
-import FinalAssets from "./interfaces/FinalAssets";
+import { FinalAssets, FinalAssetsDisplay } from "./interfaces/FinalAssets";
 import { fetchPrice } from "./utils/fetchData";
 import { parseToNumber, volumeAdjust } from "./utils/priceAdjust";
-import { checkPropOfObject } from "./utils/notCategorizedMethods";
+import { checkPropOfObject } from "./utils/notCategorized";
 import Container from "@mui/material/Container";
+import PriceTable from "./PriceTable";
 
 interface PriceProviderProps {
   assets: FinalAssets[];
   autoComValue: string;
-}
-
-interface FinalAssetsDisplay extends FinalAssets {
-  afteFee: number | null;
-  boughtPrice: number | null;
-  profit: number | null;
-  profitPercent: number | null;
 }
 
 type priceVolumeType = string | number;
@@ -33,28 +26,17 @@ export const fetchBulkPrice = async (
   let price: priceVolumeType = "";
   let median_price: priceVolumeType = "";
   for (const asset of assets) {
-    try {
-      const response = await method(asset.market_hash_name, autoComValue);
-      volume = checkPropOfObject(
-        response,
-        "volume",
-        volumeAdjust(response.volume)
-      );
-      price = checkPropOfObject(
-        response,
-        "lowest_price",
-        parseToNumber(response.lowest_price)
-      );
-      median_price = checkPropOfObject(
-        response,
-        "median_price",
-        parseToNumber(response.median_price)
-      );
-    } catch (error) {
-      volume = "Error";
-      price = "Error";
-      median_price = "Error";
-    }
+    const response = await method(asset.market_hash_name, autoComValue);
+    volume = volumeAdjust(
+      checkPropOfObject(response, "volume", response.volume)
+    ) as priceVolumeType;
+    price = parseToNumber(
+      checkPropOfObject(response, "lowest_price", response.lowest_price)
+    ) as priceVolumeType;
+    median_price = parseToNumber(
+      checkPropOfObject(response, "median_price", response.median_price)
+    ) as priceVolumeType;
+
     const updatedAssetsData = {
       ...asset,
       volume,
@@ -81,39 +63,9 @@ const PriceProvider: React.FC<PriceProviderProps> = ({
     fetchBulkPrice(assets, autoComValue, setUpdatedAssets, fetchPrice, 2000);
   }, [assets]);
 
-  const columns: GridColDef[] = [
-    {
-      field: "id",
-      headerName: "Id",
-      width: 30,
-      valueGetter: (params: GridValueGetterParams) => {
-        return params.row.key;
-      },
-    },
-    { field: "market_hash_name", headerName: "Name", width: 300 },
-    { field: "price", headerName: "Price [PLN]", width: 125 },
-    { field: "volume", headerName: "Volume", width: 125 },
-    { field: "median_price", headerName: "Median [PLN]", width: 125 },
-    { field: "amount", headerName: "Amount", width: 125, editable: true },
-  ];
-
   return (
     <Container>
-      <DataGrid
-        sx={{ height: 800, width: "100%" }}
-        rows={updatedAssets}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 20,
-            },
-          },
-        }}
-        pageSizeOptions={[20]}
-        checkboxSelection={true}
-        disableRowSelectionOnClick
-      />
+      <PriceTable assets={updatedAssets} />
     </Container>
   );
 };

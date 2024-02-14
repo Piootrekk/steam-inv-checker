@@ -1,12 +1,9 @@
-export const checkPropOfObject = (
-  obj: any,
-  prop: string,
-  value: string | number
-) => {
+export const checkPropOfObject = (obj: any, prop: string, value: string) => {
   if (obj.hasOwnProperty(prop)) {
     return (obj[prop] = value);
+  } else {
+    return (obj[prop] = `ERROR`);
   }
-  return (obj[prop] = "ERROR");
 };
 
 export const setPropsToHardcodedString = (...args: any[]) => {

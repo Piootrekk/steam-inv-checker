@@ -1,9 +1,17 @@
 export const parseToNumber = (value: string) => {
-  return parseFloat(value.replace(",", ".").replace(/[^\d.-]/g, ""));
+  try {
+    return parseFloat(value.replace(",", ".").replace(/[^\d.-]/g, ""));
+  } catch (error) {
+    return value;
+  }
 };
 
 export const volumeAdjust = (volume: string) => {
-  return parseInt(volume.replace(",", ""));
+  try {
+    return parseInt(volume.replace(",", ""));
+  } catch (error) {
+    return volume;
+  }
 };
 
 export const steamMarketFeeCalc = (price: number) => {

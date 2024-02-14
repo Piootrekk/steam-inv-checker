@@ -1,4 +1,4 @@
-export default interface FinalAssets {
+export interface FinalAssets {
   key: number;
   market_hash_name: string;
   amount: number;
@@ -8,4 +8,11 @@ export default interface FinalAssets {
   price: string | number;
   volume: string | number;
   median_price: string | number;
+}
+
+export interface FinalAssetsDisplay extends FinalAssets {
+  afteFee: number | null;
+  boughtPrice: number | null;
+  profit: number | null;
+  profitPercent: number | null;
 }
