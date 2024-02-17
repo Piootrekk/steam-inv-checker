@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import FinalAssets from "./interfaces/FinalAssets";
+import { FinalAssets } from "./interfaces/FinalAssets";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";

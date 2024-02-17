@@ -6,8 +6,13 @@ export const checkPropOfObject = (obj: any, prop: string, value: string) => {
   }
 };
 
-export const setPropsToHardcodedString = (...args: any[]) => {
+export const setPropsToHardcodedString = (...args: string[]) => {
   return args.map((arg) => {
-    return (arg = "ERROR");
+    arg = `ERROR`;
+    return args;
   });
+};
+
+export const ignoreCapInCompare = (str: string, str2: string) => {
+  return str.toLowerCase() === str2.toLowerCase();
 };

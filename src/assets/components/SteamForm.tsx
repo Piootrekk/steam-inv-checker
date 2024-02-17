@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import { useState, useRef } from "react";
 import CachedData from "./CachedData";
 import { getKeysWithPrefix } from "./utils/localStorage";
+import FileInput from "./FileInput";
 
 import { BoxStyles } from "./styles/SteamFormStyles";
 
@@ -89,6 +90,7 @@ const SteamForm = () => {
         {steamId === "" &&
           gameId === "" &&
           getKeysWithPrefix("Items:").length && <CachedData />}
+        <FileInput />
       </Box>
 
       {steamId !== "" && gameId !== "" && (

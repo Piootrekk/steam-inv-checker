@@ -14,7 +14,7 @@ export const volumeAdjust = (volume: string) => {
   }
 };
 
-export const steamMarketFeeCalc = (price: number) => {
+export const priceAfterFee = (price: number) => {
   let fee = 0;
   switch (true) {
     case price >= 0.2:

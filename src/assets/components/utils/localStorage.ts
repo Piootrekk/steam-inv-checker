@@ -3,7 +3,10 @@ const setDataToLocalStorage = (key: string, value: string) => {
 };
 
 const getDataFromLocalStorage = (key: string) => {
-  return localStorage.getItem(key);
+  const string = localStorage.getItem(key);
+  if (string) {
+    return JSON.parse(string);
+  }
 };
 
 const clearDataFromLocalStorage = (key: string) => {
@@ -14,7 +17,7 @@ const clearAllDataFromLocalStorage = () => {
   localStorage.clear();
 };
 
-const checkDataInLocalStorage = (key: string) => {
+const isDataInLocalStorage = (key: string) => {
   return localStorage.getItem(key) !== null;
 };
 
@@ -57,7 +60,7 @@ export {
   getDataFromLocalStorage,
   clearDataFromLocalStorage,
   clearAllDataFromLocalStorage,
-  checkDataInLocalStorage,
+  isDataInLocalStorage,
   getAllKeysFromLocalStorage,
   getKeysWithPrefix,
   replaceDataInLocalStorage,

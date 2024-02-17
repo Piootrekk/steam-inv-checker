@@ -11,8 +11,9 @@ export interface FinalAssets {
 }
 
 export interface FinalAssetsDisplay extends FinalAssets {
-  afteFee: number | null;
-  boughtPrice: number | null;
-  profit: number | null;
-  profitPercent: number | null;
+  id: number;
+  boughtPrice?: number;
+  profitSingle?: number;
+  profit?: number;
+  profitPercent?: number;
 }

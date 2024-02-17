@@ -2,10 +2,17 @@ import React, { Dispatch } from "react";
 import { useState, useEffect } from "react";
 import { FinalAssets, FinalAssetsDisplay } from "./interfaces/FinalAssets";
 import { fetchPrice } from "./utils/fetchData";
-import { parseToNumber, volumeAdjust } from "./utils/priceAdjust";
+import {
+  parseToNumber,
+  volumeAdjust,
+  priceAfterFee,
+} from "./utils/priceAdjust";
 import { checkPropOfObject } from "./utils/notCategorized";
 import Container from "@mui/material/Container";
 import PriceTable from "./PriceTable";
+import { getDataFromLocalStorage } from "./utils/localStorage";
+
+const BOUGHT_OBJECT = getDataFromLocalStorage("jsonData");
 
 interface PriceProviderProps {
   assets: FinalAssets[];
@@ -36,14 +43,34 @@ export const fetchBulkPrice = async (
     median_price = parseToNumber(
       checkPropOfObject(response, "median_price", response.median_price)
     ) as priceVolumeType;
-
-    const updatedAssetsData = {
+    const foundItem = BOUGHT_OBJECT?.items.find(
+      (item: any) => item.name === asset.market_hash_name
+    );
+    const updatedAssetsData: FinalAssetsDisplay = {
       ...asset,
       volume,
       price,
       median_price,
       id: asset.key,
+      boughtPrice: foundItem?.price.toFixed(2),
+      profitSingle: parseFloat(
+        (priceAfterFee(price as number) - foundItem?.price).toFixed(2)
+      ),
+      profit: parseFloat(
+        (
+          (priceAfterFee(price as number) - foundItem?.price) *
+          asset.amount
+        ).toFixed(2)
+      ),
+      profitPercent: parseFloat(
+        (
+          ((priceAfterFee(price as number) - foundItem?.price) /
+            foundItem?.price) *
+          100
+        ).toFixed(2)
+      ),
     };
+
     setUpdatedAssets((prev: FinalAssetsDisplay[]) => [
       ...prev.filter((prevAsset) => prevAsset.key !== asset.key),
       updatedAssetsData,

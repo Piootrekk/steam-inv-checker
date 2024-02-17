@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 
-import FinalAssets from "./interfaces/FinalAssets";
+import { FinalAssets } from "./interfaces/FinalAssets";
 import DataDisplay from "./DataDisplay";
 import DataInforms from "./DataInforms";
 import {
