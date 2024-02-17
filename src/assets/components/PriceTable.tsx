@@ -10,10 +10,10 @@ import React from "react";
 import { DataGridStyle } from "./styles/PriceTableStyles";
 
 const customSortComparator = (v1: any, v2: any) => {
-  if (v1 === "ERROR" && v2 !== "ERROR") {
-    return 1;
-  } else if (v1 !== "ERROR" && v2 === "ERROR") {
+  if (Number.isNaN(v1) && !Number.isNaN(v2)) {
     return -1;
+  } else if (Number.isNaN(v2) && !Number.isNaN(v1)) {
+    return 1;
   } else {
     return parseFloat(v1) - parseFloat(v2);
   }
@@ -56,7 +56,6 @@ const columns: GridColDef[] = [
     field: "median_price",
     headerName: "Median Market [PLN]",
     width: 125,
-    hideable: true,
   },
   { field: "amount", headerName: "Amount", width: 125, editable: true },
   {
@@ -64,7 +63,6 @@ const columns: GridColDef[] = [
     headerName: "Price bought",
     width: 125,
     editable: true,
-    hideable: true,
     valueFormatter: (params: GridValueFormatterParams) =>
       checkIfNaN(params.value),
     sortComparator: (v1, v2) => customSortComparator(v1, v2),
@@ -73,8 +71,6 @@ const columns: GridColDef[] = [
     field: "profitSingle",
     headerName: "Profit single [PLN]",
     width: 125,
-    hideable: true,
-
     valueFormatter: (params: GridValueFormatterParams) =>
       checkIfNaN(params.value),
     sortComparator: (v1, v2) => customSortComparator(v1, v2),
@@ -117,6 +113,15 @@ const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
         rows={assets}
         columns={columns}
         initialState={{
+          columns: {
+            columnVisibilityModel: {
+              id: false,
+              volume: false,
+              median_price: false,
+              boughtPrice: false,
+              singleProfit: false,
+            },
+          },
           pagination: {
             paginationModel: {
               pageSize: 20,

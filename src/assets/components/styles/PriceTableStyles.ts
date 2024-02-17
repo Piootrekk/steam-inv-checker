@@ -1,6 +1,6 @@
 export const DataGridStyle = {
-  height: 800,
-  width: "100%",
+  margin: "1.5rem",
+  padding: "0.5rem",
   "& .green-positive": {
     backgroundColor: "rgb(187 247 208)",
   },
