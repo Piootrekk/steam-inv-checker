@@ -4,16 +4,18 @@ import {
   GridValueFormatterParams,
   GridValueGetterParams,
   GridToolbar,
+  GridFooterContainer,
 } from "@mui/x-data-grid";
 import { FinalAssetsDisplay } from "./interfaces/FinalAssets";
 import React from "react";
 import { DataGridStyle } from "./styles/PriceTableStyles";
+import { TablePagination } from "@mui/material";
 
 const customSortComparator = (v1: any, v2: any) => {
   if (Number.isNaN(v1) && !Number.isNaN(v2)) {
-    return -1;
-  } else if (Number.isNaN(v2) && !Number.isNaN(v1)) {
     return 1;
+  } else if (Number.isNaN(v2) && !Number.isNaN(v1)) {
+    return -1;
   } else {
     return parseFloat(v1) - parseFloat(v2);
   }
@@ -39,7 +41,7 @@ const columns: GridColDef[] = [
   {
     field: "id",
     headerName: "Id",
-    width: 30,
+    width: 5,
     valueGetter: (params: GridValueGetterParams) => {
       return params.row.key;
     },
@@ -47,21 +49,22 @@ const columns: GridColDef[] = [
   {
     field: "market_hash_name",
     headerName: "Name",
-    width: 300,
+    flex: 1,
+    minWidth: 200,
     hideable: false,
   },
-  { field: "price", headerName: "Market Price [PLN]", width: 125 },
-  { field: "volume", headerName: "Volume", width: 125, hideable: true },
+  { field: "price", headerName: "Market Price [PLN]", flex: 1 },
+  { field: "volume", headerName: "Volume", flex: 1, hideable: true },
   {
     field: "median_price",
     headerName: "Median Market [PLN]",
-    width: 125,
+    flex: 1,
   },
-  { field: "amount", headerName: "Amount", width: 125, editable: true },
+  { field: "amount", headerName: "Amount", flex: 1, editable: true },
   {
     field: "boughtPrice",
     headerName: "Price bought",
-    width: 125,
+    flex: 1,
     editable: true,
     valueFormatter: (params: GridValueFormatterParams) =>
       checkIfNaN(params.value),
@@ -70,7 +73,7 @@ const columns: GridColDef[] = [
   {
     field: "profitSingle",
     headerName: "Profit single [PLN]",
-    width: 125,
+    flex: 1,
     valueFormatter: (params: GridValueFormatterParams) =>
       checkIfNaN(params.value),
     sortComparator: (v1, v2) => customSortComparator(v1, v2),
@@ -79,7 +82,7 @@ const columns: GridColDef[] = [
   {
     field: "profit",
     headerName: "Profit [PLN]",
-    width: 125,
+    flex: 1,
     valueFormatter: (params: GridValueFormatterParams) =>
       checkIfNaN(params.value),
     sortComparator: (v1, v2) => customSortComparator(v1, v2),
@@ -89,7 +92,7 @@ const columns: GridColDef[] = [
   {
     field: "profitPercent",
     headerName: "Profit %",
-    width: 125,
+    flex: 1,
     sortComparator: (v1, v2) => customSortComparator(v1, v2),
     cellClassName: (packageParams: any) => addStylesToCall(packageParams.value),
     valueFormatter: (params: GridValueFormatterParams) => {
@@ -106,12 +109,19 @@ interface PriceTablesProps {
 }
 
 const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
+  const totalAmount = assets.reduce((total, asset) => total + asset.amount, 0);
+  const totalProfit = assets
+    .reduce((total, asset) => total + (asset.profit ? asset.profit : 0), 0)
+    .toFixed(2) as unknown as number;
+
+  const averageProfit = (totalProfit / totalAmount).toFixed(2);
   return (
     <>
       <DataGrid
         sx={DataGridStyle}
         rows={assets}
         columns={columns}
+        pagination={true}
         initialState={{
           columns: {
             columnVisibilityModel: {
@@ -119,7 +129,7 @@ const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
               volume: false,
               median_price: false,
               boughtPrice: false,
-              singleProfit: false,
+              profitSingle: false,
             },
           },
           pagination: {
@@ -133,6 +143,24 @@ const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
         disableRowSelectionOnClick
         slots={{
           toolbar: GridToolbar,
+          footer: () => (
+            <>
+              <GridFooterContainer>
+                <p>Total amount: {totalAmount}</p>
+                <p>Total profit: {totalProfit}</p>
+                <p> Average profit: {averageProfit}%</p>
+                <TablePagination
+                  rowsPerPageOptions={[20]}
+                  component="div"
+                  count={assets.length}
+                  rowsPerPage={20}
+                  page={0}
+                  onPageChange={() => {}}
+                  onRowsPerPageChange={() => {}}
+                />
+              </GridFooterContainer>
+            </>
+          ),
         }}
       />
     </>

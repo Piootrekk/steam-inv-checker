@@ -8,6 +8,17 @@ export const Styles = {
   textAlign: "center",
   position: "relative",
 
+  "& .selectButtons": {
+    display: "flex",
+    justifyContent: "center",
+    gap: "1rem",
+  },
+
+  "& .MuiButton-root": {
+    width: "10rem",
+    fontSize: "0.75rem",
+  },
+
   "& .MuiGrid-container": {
     justifyContent: "center",
     marginTop: "1rem",

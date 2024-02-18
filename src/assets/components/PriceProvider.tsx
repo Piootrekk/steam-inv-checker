@@ -7,7 +7,7 @@ import {
   volumeAdjust,
   priceAfterFee,
 } from "./utils/priceAdjust";
-import { checkPropOfObject } from "./utils/notCategorized";
+import { checkPropOfObject, ignoreCapInCompare } from "./utils/notCategorized";
 import Container from "@mui/material/Container";
 import PriceTable from "./PriceTable";
 import { getDataFromLocalStorage } from "./utils/localStorage";
@@ -43,9 +43,10 @@ export const fetchBulkPrice = async (
     median_price = parseToNumber(
       checkPropOfObject(response, "median_price", response.median_price)
     ) as priceVolumeType;
-    const foundItem = BOUGHT_OBJECT?.items.find(
-      (item: any) => item.name === asset.market_hash_name
+    const foundItem = BOUGHT_OBJECT?.items.find((item: any) =>
+      ignoreCapInCompare(item.name, asset.market_hash_name)
     );
+
     const updatedAssetsData: FinalAssetsDisplay = {
       ...asset,
       volume,
@@ -87,7 +88,7 @@ const PriceProvider: React.FC<PriceProviderProps> = ({
 
   useEffect(() => {
     console.log("Mounting PriceProvider");
-    fetchBulkPrice(assets, autoComValue, setUpdatedAssets, fetchPrice, 2000);
+    fetchBulkPrice(assets, autoComValue, setUpdatedAssets, fetchPrice, 4000);
   }, [assets]);
 
   return (

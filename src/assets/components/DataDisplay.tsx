@@ -37,6 +37,19 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets, autoComValue }) => {
     setSendSelected([...selectedItems]);
   };
 
+  const selectAll = () => {
+    setSelectedItems(assets);
+  };
+
+  const unselectAll = () => {
+    setSelectedItems([]);
+  };
+
+  const selectMarketable = () => {
+    const marketableAssets = assets.filter((asset) => asset.marketable);
+    setSelectedItems(marketableAssets);
+  };
+
   return (
     <>
       <Button
@@ -47,6 +60,22 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ assets, autoComValue }) => {
         {`Fetch price ${selectedItems.length} items`}
       </Button>
       <Box sx={Styles}>
+        <div className="selectButtons">
+          <Button variant="contained" color="success" onClick={selectAll}>
+            Select All
+          </Button>
+          <Button variant="contained" color="success" onClick={unselectAll}>
+            Unselect All
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={selectMarketable}
+          >
+            Select Marketable
+          </Button>
+        </div>
+
         <Grid container spacing={2}>
           {assets.map((asset) => (
             <Grid item key={asset.key}>
