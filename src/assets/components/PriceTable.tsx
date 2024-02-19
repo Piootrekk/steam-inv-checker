@@ -5,13 +5,13 @@ import {
   GridValueGetterParams,
   GridToolbar,
   GridFooterContainer,
+  GridPagination,
 } from "@mui/x-data-grid";
 import { FinalAssetsDisplay } from "./interfaces/FinalAssets";
 import React from "react";
 import { DataGridStyle } from "./styles/PriceTableStyles";
-import { TablePagination } from "@mui/material";
-
-const customSortComparator = (v1: any, v2: any) => {
+import CustomFooterPagination from "./CustomFooterPagination";
+const customSortComparator = (v1: string, v2: string) => {
   if (Number.isNaN(v1) && !Number.isNaN(v2)) {
     return 1;
   } else if (Number.isNaN(v2) && !Number.isNaN(v1)) {
@@ -21,14 +21,14 @@ const customSortComparator = (v1: any, v2: any) => {
   }
 };
 
-const checkIfNaN = (value: any) => {
+const checkIfNaN = (value: string) => {
   if (Number.isNaN(value)) {
     return "ERROR";
   }
   return value;
 };
 
-const addStylesToCall = (value: any) => {
+const addStylesToCall = (value: number) => {
   if (value > 0) {
     return "green-positive";
   } else if (value < 0) {
@@ -110,18 +110,20 @@ interface PriceTablesProps {
 
 const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
   const totalAmount = assets.reduce((total, asset) => total + asset.amount, 0);
-  const totalProfit = assets
-    .reduce((total, asset) => total + (asset.profit ? asset.profit : 0), 0)
-    .toFixed(2) as unknown as number;
+  const totalProfit = assets.reduce(
+    (total, asset) => total + (asset.profit ? asset.profit : 0),
+    0
+  );
 
-  const averageProfit = (totalProfit / totalAmount).toFixed(2);
+  const averageProfit = (totalProfit / totalAmount).toFixed(
+    2
+  ) as unknown as number;
   return (
     <>
       <DataGrid
         sx={DataGridStyle}
         rows={assets}
         columns={columns}
-        pagination={true}
         initialState={{
           columns: {
             columnVisibilityModel: {
@@ -134,32 +136,24 @@ const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
           },
           pagination: {
             paginationModel: {
-              pageSize: 20,
+              pageSize: 5,
             },
           },
         }}
-        pageSizeOptions={[20]}
+        pageSizeOptions={[5, 10, 25, 100]}
         checkboxSelection={true}
         disableRowSelectionOnClick
         slots={{
           toolbar: GridToolbar,
           footer: () => (
-            <>
-              <GridFooterContainer>
-                <p>Total amount: {totalAmount}</p>
-                <p>Total profit: {totalProfit}</p>
-                <p> Average profit: {averageProfit}%</p>
-                <TablePagination
-                  rowsPerPageOptions={[20]}
-                  component="div"
-                  count={assets.length}
-                  rowsPerPage={20}
-                  page={0}
-                  onPageChange={() => {}}
-                  onRowsPerPageChange={() => {}}
-                />
-              </GridFooterContainer>
-            </>
+            <GridFooterContainer>
+              <CustomFooterPagination
+                totalAmount={totalAmount}
+                totalProfit={totalProfit.toFixed(2) as unknown as number}
+                averageProfit={averageProfit}
+              />
+              <GridPagination />
+            </GridFooterContainer>
           ),
         }}
       />
