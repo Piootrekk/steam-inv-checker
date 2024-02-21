@@ -13,6 +13,7 @@ export interface FinalAssets {
 export interface FinalAssetsDisplay extends FinalAssets {
   id: number;
   boughtPrice?: number;
+  priceAfterFee?: number;
   profitSingle?: number;
   profit?: number;
   profitPercent?: number;

@@ -54,6 +54,7 @@ export const fetchBulkPrice = async (
       median_price,
       id: asset.key,
       boughtPrice: foundItem?.price.toFixed(2),
+      priceAfterFee: priceAfterFee(price as number),
       profitSingle: parseFloat(
         (priceAfterFee(price as number) - foundItem?.price).toFixed(2)
       ),

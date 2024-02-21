@@ -89,7 +89,7 @@ const SteamForm = () => {
         </Button>
         {steamId === "" &&
           gameId === "" &&
-          getKeysWithPrefix("Items:").length && <CachedData />}
+          getKeysWithPrefix("Items:").length > 0 && <CachedData />}
         <FileInput />
       </Box>
 

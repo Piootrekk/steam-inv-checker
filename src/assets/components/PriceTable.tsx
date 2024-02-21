@@ -11,6 +11,7 @@ import { FinalAssetsDisplay } from "./interfaces/FinalAssets";
 import React from "react";
 import { DataGridStyle } from "./styles/PriceTableStyles";
 import CustomFooterPagination from "./CustomFooterPagination";
+
 const customSortComparator = (v1: string, v2: string) => {
   if (Number.isNaN(v1) && !Number.isNaN(v2)) {
     return 1;
@@ -61,6 +62,14 @@ const columns: GridColDef[] = [
     flex: 1,
   },
   { field: "amount", headerName: "Amount", flex: 1, editable: true },
+  {
+    field: "priceAfterFee",
+    headerName: "Price after fee",
+    flex: 1,
+    valueFormatter: (params: GridValueFormatterParams) =>
+      checkIfNaN(params.value),
+    sortComparator: (v1, v2) => customSortComparator(v1, v2),
+  },
   {
     field: "boughtPrice",
     headerName: "Price bought",
@@ -115,9 +124,16 @@ const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
     0
   );
 
-  const averageProfit = (totalProfit / totalAmount).toFixed(
-    2
-  ) as unknown as number;
+  // const averageProfit = (totalProfit / totalAmount).toFixed(
+  //   2
+  // ) as unknown as number;
+
+  const totalPriceAfterFee = assets.reduce(
+    (total, asset) =>
+      total + (asset.priceAfterFee ? asset.priceAfterFee * asset.amount : 0),
+    0
+  );
+
   return (
     <>
       <DataGrid
@@ -132,6 +148,7 @@ const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
               median_price: false,
               boughtPrice: false,
               profitSingle: false,
+              priceAfterFee: false,
             },
           },
           pagination: {
@@ -150,7 +167,9 @@ const PriceTable: React.FC<PriceTablesProps> = ({ assets }) => {
               <CustomFooterPagination
                 totalAmount={totalAmount}
                 totalProfit={totalProfit.toFixed(2) as unknown as number}
-                averageProfit={averageProfit}
+                totalPriceAfterFee={
+                  totalPriceAfterFee.toFixed(2) as unknown as number
+                }
               />
               <GridPagination />
             </GridFooterContainer>

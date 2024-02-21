@@ -8,7 +8,6 @@ import { BoxStyles } from "./styles/CachedDataStyles";
 import { getKeysWithPrefix } from "./utils/localStorage";
 import { useState } from "react";
 import DataInforms from "./DataInforms";
-import DataDisplay from "./DataDisplay";
 
 const CachedData = () => {
   const [localStorageData, setLocalStorageData] = useState<any>(null);
@@ -44,12 +43,6 @@ const CachedData = () => {
       {localStorageData && (
         <DataInforms
           inputValue={localStorageData.steamid}
-          autoComValue={localStorageData.appid}
-        />
-      )}
-      {localStorageData && (
-        <DataDisplay
-          assets={localStorageData.data}
           autoComValue={localStorageData.appid}
         />
       )}

@@ -2,19 +2,19 @@ import React from "react";
 interface CustomFooterPaginationProps {
   totalAmount: number;
   totalProfit: number;
-  averageProfit: number;
+  totalPriceAfterFee: number;
 }
 
 const CustomFooterPagination: React.FC<CustomFooterPaginationProps> = ({
   totalAmount,
   totalProfit,
-  averageProfit,
+  totalPriceAfterFee,
 }) => {
   return (
     <>
       <p>Total amount: {totalAmount}</p>
-      <p>Total profit: {totalProfit}</p>
-      <p> Average profit: {averageProfit}%</p>
+      <p>Total profit: {totalProfit} PLN</p>
+      <p> Total after fees: {totalPriceAfterFee} PLN</p>
     </>
   );
 };
